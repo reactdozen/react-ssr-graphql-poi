@@ -1,6 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { ApolloServer, gql } from "apollo-server-micro";
+import { ContextFunction } from "apollo-server-core";
+
+const MATCHING_AUTH_HEADER = "valid-auth-header";
 
 const typeDefs = gql`
   type Query {
@@ -15,13 +18,32 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    items(parent, args, context) {
-      return [{ name: "item-1", price: 123 }];
+    items(parent, args, context: ApolloServerContext) {
+      const item = { name: "item-1", price: 123 };
+
+      if (context.X_AUTH_HEADER !== MATCHING_AUTH_HEADER) {
+        delete item["price"];
+      }
+
+      return [item];
     },
   },
 };
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+type ApolloServerContext = { X_AUTH_HEADER: string };
+
+const makeApolloServerContext: ContextFunction<any, ApolloServerContext> = (
+  requestContext
+) => {
+  const { req } = requestContext;
+  return { X_AUTH_HEADER: req.headers["x-auth-header"] || "" };
+};
+
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: makeApolloServerContext,
+});
 
 export const config = {
   api: {
