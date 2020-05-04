@@ -12,6 +12,7 @@ const typeDefs = gql`
 
   type Item {
     name: String!
+    description: String!
     price: Int
   }
 `;
@@ -19,7 +20,11 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     items(parent, args, context: ApolloServerContext) {
-      const item = { name: "item-1", price: 123 };
+      const item = {
+        name: "item-1",
+        description: "some-description",
+        price: 123,
+      };
 
       if (context.X_AUTH_HEADER !== MATCHING_AUTH_HEADER) {
         delete item["price"];

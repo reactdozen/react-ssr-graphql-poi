@@ -54,6 +54,7 @@ const QUERY_ITEMS = gql`
   query Items {
     items {
       name
+      description
       price
     }
   }
