@@ -4,17 +4,19 @@ import { ApolloServer, gql } from "apollo-server-micro";
 
 const typeDefs = gql`
   type Query {
-    users: [User!]!
+    items: [Item]!
   }
-  type User {
-    name: String
+
+  type Item {
+    name: String!
+    price: Int
   }
 `;
 
 const resolvers = {
   Query: {
-    users(parent, args, context) {
-      return [{ name: "Nextjs" }];
+    items(parent, args, context) {
+      return [{ name: "item-1", price: 123 }];
     },
   },
 };
