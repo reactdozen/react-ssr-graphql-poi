@@ -2,7 +2,7 @@ Y=2020
 M=5
 D=4
 i=17
-comment=" Fetch POI information and update items cache selectively"
+comment=" Updated Read Me"
 
 export GIT_COMMITTER_DATE="$Y-$M-$D 10:$i:34"
 export GIT_AUTHOR_DATE="$Y-$M-$D 10:$i:34"
